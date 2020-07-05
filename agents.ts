@@ -127,7 +127,7 @@ export const backtrackSearch = (
     return { failedState: node.puzzle };
   }
 
-  // Assign a value option and recur into rest of the puzzle
+  // Recursive case: Assign a value option and recur into rest of the puzzle
   let result: Solution | FailedPath = { failedState: [] as Puzzle };
 
   for (let i = 0; i < valueOptions.length; i++) {

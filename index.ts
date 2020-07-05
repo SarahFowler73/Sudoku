@@ -42,7 +42,9 @@ const runAgents = (path: string) =>
 const filePath = process.argv[2];
 
 if (typeof filePath !== "string") {
-  console.log("Error: Please pass the path to a test file\n");
+  console.log(
+    "Error: Please pass the path to a test file in the following format: `npm run start -- pathToSudokuTestFile.txt`\n"
+  );
 } else if (!fs.existsSync(filePath)) {
   console.log(`Error: "${filePath}" does not exist. Please check your input\n`);
 } else {

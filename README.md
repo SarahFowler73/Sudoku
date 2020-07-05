@@ -1,12 +1,16 @@
-# Depth Limited Search for Uninformed Agent
+# 16X16 Sudoku CSP Agents - Uninformed and MRV
 
-### CSC 479 Assignment 1
+### CSC 479 Assignment 2
 
 ### Sarah Fowler
 
-This solution to the vacuum world was built using Typescript and Node. In a 2x2 room, with the vacuum starting in the bottom left square (0,0), and searching actions to a max depth of 10.
+This solution to the super Sudoku CSP was built using Typescript and Node.
 
-See answers to questions below.
+Given a 16X16 text file with a Sudoku puzzle passed in by the user, two agents will solve it using a recursive search.
+
+One agent is uninformed, and will try to search left to right, top to bottom, and the other uses the Mininium Remaining Values heuristic to choose the next square to fill based on it being the most constrained.
+
+See discussion of observations below.
 
 # Set Up
 
@@ -23,21 +27,22 @@ npm install
 ## Run the depth-limited search in the terminal
 
 ```
-npm start
+npm run start -- pathToSudokuTestFile.txt
+
 ```
 
-# Questions:
+# Discussion
 
-1. _What is the total possible size of the agent’s search space? In other words, assuming the agent searches through the entire search space to a depth limit of 10, how many nodes will the search tree have? Include the initial state node in your answer. Also, be sure to count repeated actions separately; i.e., each “Suck” node is counted as a separate node._
+Upon building and running both agents on a number of puzzles, the uninformed agent is consistently more poorly performing than the MRV agent, sometimes by thousands of attempts. In many cases, the MRV agent has the same number of attempts at assigning squares as there are empty squares at the beginning of the puzzle.
 
- The number of nodes in the search tree can be derived by the formula for nodes in k-ary trees: `(k (h + 1) - 1) / (k - 1)`. Since there are 5 branches from each node `(k = 5)` and the max depth is 10 `(h = 10)`, would be `(5 (10 + 1) - 1) / (5 - 1) = 2441406` There are 2441406 nodes in the total tree.
+The only difference between the two agents is the method for choosing the next square, so they share the same backtracking recursive search function.
 
-2. _Assuming the agent begins the depth-limited search given the initial state shown in Figure 1, and uses a depth limit of 10, will the agent find a sequence of actions that will lead it to the goal state? If so, state how many actions will be in the solution. If not, explain why not. (Note: you may use the result you obtain from Part 2 to help you answer this question.)_
+There are three base cases:
 
- Since the vacuum searches depth-first, and always considers the same action first, the same action will be performed multiple times uselessly on the left-most branch (in this case, the vacuum will try to "suck" 10 times before it tries any other actions). Since the first solution found (not the most optimal solution) is returned, many of these unnecessary actions are included in the preorder traversal of the tree. This means that it will take `11` actions to find a solution.
+1. There are no remaining open squares and the puzzle satisfies all constraints (Solution)
+2. There are no remaining open squares and the puzzle does not satisfy constraints (Failure, which should only happen if puzzle is not solvable)
+3. There are no remaining viable values for a given square (Failure)
 
- The optimal `MAX_DEPTH` can be derived based on the size of the room (number of squares) you're searching. Since you always "Suck" first, you would subsequently need to alter moving in some direction and sucking in that new square. `S + (M + S) * (numSquares - 1)` where S and M are suck and move costs `1`. So to clean a 2x2 room (4 squares), you need a depth limit of `1 + 2 * (4 - 1) = 7`. In the `traverse.ts` file, if you cbange the `MAX_DEPTH` to 7, you'll see a more direct path to the solution (8 actions), and at `MAX_DEPTH` 6, no solution can be found.
+When there is at least one viable value for the chosen empty square, it will attempt to assign a value to it and recur into the rest of the puzzle, backtracking if it finds a dead end.
 
-3. _If the agent were solving a 4x4 instance of the Vacuum World, how would that affect the size of the agent’s search space?_
-
- If the size of the vacuum world increased to 4x4, the same actions would be available to the agent, namely: suck, north, south, east, and west. That would mean that if the search `MAX_DEPTH` remained the same, the search space would remain the same size, however, as discussed in question 2, the same `MAX_DEPTH` could be insufficient. There would now be 16 squares in the room, meaning `1 + 2 * (16 - 1) = 31`, so with the current search space, a solution could not be found. At a `MAX_DEPTH` of 31, the depth-first search would waste even more time searching through impossible solutions, and a breadth-first search would probably be more efficient in discovering a solution.
+Adding the MRV heuristic clearly makes the agent "smarter," and eliminates much of the brute forcing, and approaches the puzzle more like a human would reason through it.
