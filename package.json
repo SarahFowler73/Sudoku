@@ -1,0 +1,19 @@
+{
+  "name": "uninformed-search",
+  "version": "1.0.0",
+  "description": "CSC 479 Assignment 1",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "author": "Sarah Fower (sfowl3@uis.edu)",
+  "license": "MIT",
+  "dependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5",
+    "yargs": "^15.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.14"
+  }
+}
