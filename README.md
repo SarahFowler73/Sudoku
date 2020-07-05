@@ -6,9 +6,9 @@
 
 This solution to the super Sudoku CSP was built using Typescript and Node.
 
-Given a 16X16 text file with a Sudoku puzzle passed in by the user, two agents will solve it using a recursive search.
+Given a 16X16 text file with a Sudoku puzzle passed in by the user, two agents will solve it using a recursive search. One agent is uninformed, and will try to search left to right, top to bottom, and the other uses the Mininium Remaining Values heuristic to choose the next square to fill based on it being the most constrained.
 
-One agent is uninformed, and will try to search left to right, top to bottom, and the other uses the Mininium Remaining Values heuristic to choose the next square to fill based on it being the most constrained.
+Recursive agent code and support functions specifically for the backtrack tree is located in `agents.ts`. Helpers for testing values, extracting data, and updating the puzzle are found in `helpers.ts`. `types.ts` just defines Typescript types and constant values.
 
 See discussion of observations below.
 
